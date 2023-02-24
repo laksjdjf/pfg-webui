@@ -11,7 +11,7 @@ It can generate a variety of images without prompting.
 
 # Usage
 + Install this extension in the same way as other extensions.
-+ Download [pretrained model](https://huggingface.co/furusu/PFG) and put it in ./models.
++ Download [pretrained model](https://huggingface.co/furusu/PFG) (pfg-wd14-n10.pt etc..) and put it in ./models.
 + You can see menu bar of "PFG" on txt2img tab.
 
 # Hint
