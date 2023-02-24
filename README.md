@@ -11,6 +11,7 @@ It can generate a variety of images without prompting.
 
 # Usage
 + Install this extension in the same way as other extensions.
++ Install tensorflow==?.??.? (I tested it in tensorflow==2.9.1)
 + Download [pretrained model](https://huggingface.co/furusu/PFG) (pfg-wd14-n10.pt etc..) and put it in ./models.
 + You can see menu bar of "PFG" on txt2img tab.
 
