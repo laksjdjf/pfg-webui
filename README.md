@@ -13,4 +13,4 @@ It can generate a variety of images without prompting.
 + You can see menu bar of "PFG" on txt2img tab.
 
 # Example
-
+![image](example.png)
