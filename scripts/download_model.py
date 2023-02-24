@@ -4,12 +4,13 @@ from huggingface_hub import hf_hub_download
 import os
 
 DEFAULT_WD14_TAGGER_REPO = 'SmilingWolf/wd-v1-4-vit-tagger-v2'
+TAGGER_DIR = 'wd-v1-4-vit-tagger-v2'
 FILES = ["keras_metadata.pb", "saved_model.pb"]
 SUB_DIR = "variables"
 SUB_DIR_FILES = ["variables.data-00000-of-00001", "variables.index"]
 
 def download(path):
-    model_dir = os.path.join(path, "wd-v1-4-vit-tagger-v2")
+    model_dir = os.path.join(path, TAGGER_DIR)
     if not os.path.exists(model_dir):
         print(f"downloading wd14 tagger model from hf_hub. id: {DEFAULT_WD14_TAGGER_REPO}")
         for file in FILES:
