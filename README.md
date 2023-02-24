@@ -2,7 +2,7 @@
 [PFG](https://github.com/laksjdjf/pfg)(Prompt Free Generation) is a method of guiding with an image by concatenating the image into a text encoder hidden states.
 It can generate a variety of images without prompting.
 
-※This script work after merge [it](https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/8064).
+※This script work after [it](https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/8064) merged.
 
 # Method
 1. Convert image into (786,) vector by [wd14tagger](https://huggingface.co/SmilingWolf/wd-v1-4-vit-tagger-v2) (output of last pooling layer)
