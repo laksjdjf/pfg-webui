@@ -1,5 +1,5 @@
 # pfg-webui
-PFG(Prompt Free Generation) is a method of guiding with an image by concatenating the image into a text encoder hidden states.
+[PFG](https://github.com/laksjdjf/pfg)(Prompt Free Generation) is a method of guiding with an image by concatenating the image into a text encoder hidden states.
 It can generate a variety of images without prompting.
 
 # Method
