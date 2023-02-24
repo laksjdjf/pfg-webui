@@ -15,6 +15,9 @@ It can generate a variety of images without prompting.
 + Download [pretrained model](https://huggingface.co/furusu/PFG) and put it in ./models.
 + You can see menu bar of "PFG" on txt2img tab.
 
+# Hint
++ The CFG scale is an important parameter. It may work better if it is larger than for normal image generation.
+
 # Example
 ![image](example.png)
 
