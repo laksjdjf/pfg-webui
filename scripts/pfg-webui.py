@@ -20,6 +20,7 @@ from tensorflow.keras.models import load_model, Model
 
 import os
 
+#extensions/pfg-webui直下のパス
 CURRENT_DIRECTORY = scripts.basedir()
 
 class Script(scripts.Script):
@@ -30,6 +31,7 @@ class Script(scripts.Script):
     def title(self):
         return "PFG for webui"
     
+    #どうやらこれをやるとタブに常に表示されるらしい。
     def show(self, is_img2img):
         return scripts.AlwaysVisible
 
@@ -49,7 +51,8 @@ class Script(scripts.Script):
                     pfg_num_tokens = gr.Slider(minimum=0, maximum=20, step=1.0, value=10.0, label="pfg num tokens")
                     
         return enabled, image, pfg_scale, tagger_path, pfg_path, pfg_num_tokens
-                                      
+    
+    #wd-14-taggerの推論関数
     def infer(self, img:Image):
         img = smart_imread_pil(img)
         img = smart_24bit(img)
@@ -58,22 +61,38 @@ class Script(scripts.Script):
         img = img.astype(np.float32)
         probs = self.tagger(np.array([img]), training=False)
         return torch.tensor(probs.numpy()).squeeze(0).cpu()
-
+    
+    #CFGのdenoising step前に起動してくれるらしい。
     def denoiser_callback(self, params: CFGDenoisedParams):
+        #(batch_size, cond_tokens, dim)
         cond = params.tensor
+        
+        #(batch_size, uncond_tokens, dim)
         uncond = params.uncond
+        
+        #(768,)
         pfg_feature = self.infer(self.image)
+        
+        #(768,) -> (768 * num_tokens, )
         pfg_cond = self.weight @ pfg_feature + self.bias
+        
+        #(768 * num_tokens, ) -> (1, 768, num_tokens) -> (batch_size, 768, num_tokens)
         pfg_cond = pfg_cond.reshape(1, self.pfg_num_tokens, -1).repeat(cond.shape[0],1,1)
         pfg_cond = pfg_cond.to(cond.device, dtype = cond.dtype)
+        
+        #concatenate
         params.tensor = torch.cat([cond,pfg_cond],dim=1)
+        
+        #copy EOS
         params.uncond = torch.cat([uncond,uncond[:,-1:,:].repeat(1,self.pfg_num_tokens,1)],dim=1)
                                      
 
     def process(self, p: StableDiffusionProcessing, enabled:bool, image: Image, pfg_scale:float, tagger_path:str, pfg_path: str, pfg_num_tokens:int):
+        
         self.enabled = enabled
         if not self.enabled:
             return
+        
         self.image = image
         self.pfg_scale = pfg_scale
         self.pfg_num_tokens = pfg_num_tokens
