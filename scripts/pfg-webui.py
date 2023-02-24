@@ -13,6 +13,7 @@ from modules.script_callbacks import CFGDenoisedParams, on_cfg_denoiser
 from modules.processing import StableDiffusionProcessing
 
 from scripts.dbimutils import smart_imread_pil, smart_24bit, make_square, smart_resize
+from scripts.download_model import download, TAGGER_DIR
 from PIL import Image
 
 import tensorflow as tf
@@ -27,6 +28,7 @@ class Script(scripts.Script):
 
     def __init__(self):
         self.model_list = os.listdir(os.path.join(CURRENT_DIRECTORY, "models/"))
+        download(CURRENT_DIRECTORY)
 
     def title(self):
         return "PFG for webui"
@@ -44,13 +46,11 @@ class Script(scripts.Script):
                 with gr.Row():
                     pfg_scale = gr.Slider(minimum=0, maximum=3, step=0.05, label="pfg scale", value=1.0)
                 with gr.Row():
-                    tagger_path = gr.Textbox(value="wd-v1-4-vit-tagger-v2", label="WD14tagger-vit-v2 path")
-                with gr.Row():
                     pfg_path = gr.Dropdown(self.model_list, label="pfg model", value = None)
                 with gr.Row():
                     pfg_num_tokens = gr.Slider(minimum=0, maximum=20, step=1.0, value=10.0, label="pfg num tokens")
                     
-        return enabled, image, pfg_scale, tagger_path, pfg_path, pfg_num_tokens
+        return enabled, image, pfg_scale, pfg_path, pfg_num_tokens
     
     #wd-14-taggerの推論関数
     def infer(self, img:Image):
@@ -87,7 +87,7 @@ class Script(scripts.Script):
         params.uncond = torch.cat([uncond,uncond[:,-1:,:].repeat(1,self.pfg_num_tokens,1)],dim=1)
                                      
 
-    def process(self, p: StableDiffusionProcessing, enabled:bool, image: Image, pfg_scale:float, tagger_path:str, pfg_path: str, pfg_num_tokens:int):
+    def process(self, p: StableDiffusionProcessing, enabled:bool, image: Image, pfg_scale:float, pfg_path: str, pfg_num_tokens:int):
         
         self.enabled = enabled
         if not self.enabled:
@@ -111,7 +111,7 @@ class Script(scripts.Script):
             else:
                 print("Not enough GPU hardware devices available")
 
-            self.tagger = load_model(os.path.join(CURRENT_DIRECTORY, tagger_path))
+            self.tagger = load_model(os.path.join(CURRENT_DIRECTORY, TAGGER_DIR))
             self.tagger = Model(self.tagger.layers[0].input, self.tagger.layers[-3].output) #最終層手前のプーリング層の出力を使う
                                      
         if not hasattr(self, 'callbacks_added'):
