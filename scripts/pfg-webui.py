@@ -27,7 +27,7 @@ CURRENT_DIRECTORY = scripts.basedir()
 class Script(scripts.Script):
 
     def __init__(self):
-        self.model_list = os.listdir(os.path.join(CURRENT_DIRECTORY, "models/"))
+        self.model_list = [file for file in os.listdir(os.path.join(CURRENT_DIRECTORY, "models/")) if file != "put_models_here.txt"]
         download(CURRENT_DIRECTORY)
 
     def title(self):
