@@ -10,7 +10,7 @@ It can generate a variety of images without prompting.
 # Usage
 + Install this extension in the same way as other extensions.
 + Download [wd14tagger](https://huggingface.co/SmilingWolf/wd-v1-4-vit-tagger-v2).
-+ Download [pretrained model](https://huggingface.co/furusu/PFG)
++ Download [pretrained model](https://huggingface.co/furusu/PFG) and put it in ./models.
 + You can see menu bar of "PFG" on txt2img tab.
 
 # Example
