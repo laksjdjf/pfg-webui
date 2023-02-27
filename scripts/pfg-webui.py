@@ -64,7 +64,7 @@ class Script(scripts.Script):
     
     #CFGのdenoising step前に起動してくれるらしい。
     def denoiser_callback(self, params: CFGDenoisedParams):
-        self.enabled:
+        if self.enabled:
             #(batch_size, cond_tokens, dim)
             cond = params.tensor
 
