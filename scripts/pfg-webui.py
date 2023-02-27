@@ -64,27 +64,28 @@ class Script(scripts.Script):
     
     #CFGのdenoising step前に起動してくれるらしい。
     def denoiser_callback(self, params: CFGDenoisedParams):
-        #(batch_size, cond_tokens, dim)
-        cond = params.tensor
-        
-        #(batch_size, uncond_tokens, dim)
-        uncond = params.uncond
-        
-        #(768,)
-        pfg_feature = self.infer(self.image)
-        
-        #(768,) -> (768 * num_tokens, )
-        pfg_cond = self.weight @ pfg_feature + self.bias
-        
-        #(768 * num_tokens, ) -> (1, 768, num_tokens) -> (batch_size, 768, num_tokens)
-        pfg_cond = pfg_cond.reshape(1, self.pfg_num_tokens, -1).repeat(cond.shape[0],1,1)
-        pfg_cond = pfg_cond.to(cond.device, dtype = cond.dtype)
-        
-        #concatenate
-        params.tensor = torch.cat([cond,pfg_cond],dim=1)
-        
-        #copy EOS
-        params.uncond = torch.cat([uncond,uncond[:,-1:,:].repeat(1,self.pfg_num_tokens,1)],dim=1)
+        self.enabled:
+            #(batch_size, cond_tokens, dim)
+            cond = params.tensor
+
+            #(batch_size, uncond_tokens, dim)
+            uncond = params.uncond
+
+            #(768,)
+            pfg_feature = self.infer(self.image)
+
+            #(768,) -> (768 * num_tokens, )
+            pfg_cond = self.weight @ pfg_feature + self.bias
+
+            #(768 * num_tokens, ) -> (1, 768, num_tokens) -> (batch_size, 768, num_tokens)
+            pfg_cond = pfg_cond.reshape(1, self.pfg_num_tokens, -1).repeat(cond.shape[0],1,1)
+            pfg_cond = pfg_cond.to(cond.device, dtype = cond.dtype)
+
+            #concatenate
+            params.tensor = torch.cat([cond,pfg_cond],dim=1)
+
+            #copy EOS
+            params.uncond = torch.cat([uncond,uncond[:,-1:,:].repeat(1,self.pfg_num_tokens,1)],dim=1)
                                      
 
     def process(self, p: StableDiffusionProcessing, enabled:bool, image: Image, pfg_scale:float, pfg_path: str, pfg_num_tokens:int):
