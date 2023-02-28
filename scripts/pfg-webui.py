@@ -8,7 +8,7 @@ from modules import devices
 import modules.scripts as scripts
 import gradio as gr
 
-from modules.script_callbacks import CFGDenoisedParams, on_cfg_denoiser
+from modules.script_callbacks import CFGDenoiserParams, on_cfg_denoiser
 
 from modules.processing import StableDiffusionProcessing
 
@@ -63,7 +63,7 @@ class Script(scripts.Script):
         return torch.tensor(probs.numpy()).squeeze(0).cpu()
     
     #CFGのdenoising step前に起動してくれるらしい。
-    def denoiser_callback(self, params: CFGDenoisedParams):
+    def denoiser_callback(self, params: CFGDenoiserParams):
         if self.enabled:
             #(batch_size, cond_tokens, dim)
             cond = params.tensor
@@ -86,6 +86,9 @@ class Script(scripts.Script):
 
             #copy EOS
             params.uncond = torch.cat([uncond,uncond[:,-1:,:].repeat(1,self.pfg_num_tokens,1)],dim=1)
+
+            if params.sampling_step == 0:
+                print(f"Apply pfg num_tokens:{self.pfg_num_tokens}(this message will be duplicated)")
                                      
 
     def process(self, p: StableDiffusionProcessing, enabled:bool, image: Image, pfg_scale:float, pfg_path: str, pfg_num_tokens:int):
@@ -123,4 +126,3 @@ class Script(scripts.Script):
 
     def postprocess(self, *args):
         return
-
