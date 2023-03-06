@@ -130,7 +130,7 @@ class Script(scripts.Script):
         
         self.use_onnx = use_onnx
         
-        self.pfg_feature = self.infer(self.image)
+        self.pfg_feature = self.infer(self.image) * pfg_scale
         
         if not hasattr(self, 'callbacks_added'):
             on_cfg_denoiser(self.denoiser_callback)
