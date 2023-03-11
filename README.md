@@ -1,4 +1,6 @@
- **※This script works after [it](https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/8064) merged.**
+~~※This script works after [it](https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/8064) merged.~~
+ 
+ 2023/03/11 This PR has been merged and updated accordingly.
 
 # pfg-webui
 [PFG](https://github.com/laksjdjf/pfg)(Prompt Free Generation) is a method of guiding with an image by concatenating the image into a text encoder hidden states.
