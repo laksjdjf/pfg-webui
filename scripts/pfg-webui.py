@@ -70,10 +70,10 @@ class Script(scripts.Script):
     def denoiser_callback(self, params: CFGDenoiserParams):
         if self.enabled:
             #(batch_size, cond_tokens, dim)
-            cond = params.tensor
+            cond = params.text_cond
 
             #(batch_size, uncond_tokens, dim)
-            uncond = params.uncond
+            uncond = params.text_uncond
 
             #(768,)
             pfg_feature = self.pfg_feature
@@ -86,10 +86,10 @@ class Script(scripts.Script):
             pfg_cond = pfg_cond.to(cond.device, dtype = cond.dtype)
 
             #concatenate
-            params.tensor = torch.cat([cond,pfg_cond],dim=1)
+            params.text_cond = torch.cat([cond,pfg_cond],dim=1)
 
             #copy EOS
-            params.uncond = torch.cat([uncond,uncond[:,-1:,:].repeat(1,self.pfg_num_tokens,1)],dim=1)
+            params.text_uncond = torch.cat([uncond,uncond[:,-1:,:].repeat(1,self.pfg_num_tokens,1)],dim=1)
 
             if params.sampling_step == 0:
                 print(f"Apply pfg num_tokens:{self.pfg_num_tokens}(this message will be duplicated)")
