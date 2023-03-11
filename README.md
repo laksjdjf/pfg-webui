@@ -17,6 +17,12 @@ It can generate a variety of images without prompting.
 + Download [pretrained model](https://huggingface.co/furusu/PFG) (pfg-wd14-n10.pt etc..) and put it in ./models.
 + You can see menu bar of "PFG" on txt2img tab.
 
+# Setting
++ pfg_scale: The strength of the pfg.
++ pfg model: Weight file of pfg in ./models.
++ pfg num tokens: This is determined uniquely for a weight file.
++ use onnx: Using onnxruntime.
+
 # Hint
 + The CFG scale is an important parameter. It may work better if it is larger than for normal image generation.
 
