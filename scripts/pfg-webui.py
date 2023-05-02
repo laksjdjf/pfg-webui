@@ -145,16 +145,16 @@ class Script(scripts.Script):
 		
 		self.use_onnx = use_onnx
 		
-		pfg_feature = self.infer(self.image) * self.pfg_scale
+		pfg_feature = self.infer(self.image)
 		#(768,) -> (dim * num_tokens, )
-		self.pfg_cond = self.weight @ pfg_feature + self.bias
+		self.pfg_cond = (self.weight @ pfg_feature + self.bias) * self.pfg_scale
 		
 		#(dim * num_tokens, ) -> (1, num_tokens, dim) 
 		self.pfg_cond = self.pfg_cond.reshape(1, self.pfg_num_tokens, -1)
 		
 		if sub_image is not None:
-			pfg_feature_sub = self.infer(self.sub_image) * self.pfg_scale
-			self.pfg_cond_sub = self.weight @ pfg_feature_sub + self.bias
+			pfg_feature_sub = self.infer(self.sub_image)
+			self.pfg_cond_sub = (self.weight @ pfg_feature_sub + self.bias) * self.pfg_scale
 			self.pfg_cond_sub = self.pfg_cond_sub.reshape(1, self.pfg_num_tokens, -1)
 		else:
 			self.pfg_feature_sub = None
