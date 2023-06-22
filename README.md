@@ -1,6 +1,8 @@
 ~~※This script works after [it](https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/8064) merged.~~
  
  2023/03/11 This PR has been merged and updated accordingly.
+ 
+ **2023/06/22 We have decided to stop inferencing with TensorFlow and ONNX and switch to PyTorch model. As a result, a new model has been downloaded and the old TensorFlow and ONNX models are no longer needed.**
 
 # pfg-webui
 [PFG](https://github.com/laksjdjf/pfg)(Prompt Free Generation) is a method of guiding with an image by concatenating the image into a text encoder hidden states.
@@ -13,7 +15,6 @@ It can generate a variety of images without prompting.
 
 # Usage
 + Install this extension in the same way as other extensions.
-+ Install tensorflow==?.??.? (I tested it in tensorflow==2.9.1) or onnxruntime.
 + Download [pretrained model](https://huggingface.co/furusu/PFG) (pfg-wd14-n10.pt etc..) and put it in ./models.
 + You can see menu bar of "PFG" on txt2img tab.
 
