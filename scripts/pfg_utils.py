@@ -12,7 +12,6 @@ TAGGER_REPO = "furusu/wd-v1-4-tagger-pytorch"
 TAGGER_FILE = "wd-v1-4-vit-tagger-v2.ckpt"
 
 def download(path):
-    print(f"downloading onnx model from hf_hub.")
     hf_hub_download(TAGGER_REPO, TAGGER_FILE, cache_dir=path, force_download=True, force_filename=TAGGER_FILE)
 
 def preprocess_image(image):
